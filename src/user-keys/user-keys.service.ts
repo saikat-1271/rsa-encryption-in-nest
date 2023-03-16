@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import {
+  AESDecrypt,
+  AESEncrypt,
+} from 'src/encryptionFunction/aesEncryptionFunction';
+import { EncryptionHelper } from 'src/encryptionFunction/EncryptionHelper';
 import { decryptData } from 'src/encryptionFunction/encryptionKeyGenerate';
 import { Repository } from 'typeorm';
 import { UserKeys } from './entity/userKey.entity';
@@ -47,5 +52,19 @@ export class UserKeysService {
       privateKey[0].privateKey,
     );
     return decryptedData;
+  }
+
+  async aesEncrypt(id: number) {
+    const aesKey = EncryptionHelper.AESEncrypt(
+      'saikatKar112233445566778899',
+      id.toString(),
+    );
+    // const aesKey = aesGenerateKeys(id);
+    return aesKey;
+  }
+  async aesDecrypt(data: string, id: number) {
+    const aesKey = EncryptionHelper.AESDecrypt(data, id.toString());
+    // const aesKey = aesGenerateKeys(id);
+    return aesKey;
   }
 }

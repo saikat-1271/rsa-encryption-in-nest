@@ -39,4 +39,17 @@ export class UserKeysController {
   ) {
     return await this.userKeyService.decryptData(cryptedData, id);
   }
+
+  @Get('aesEncrypt/:id')
+  async aesEncrypt(@Param('id', ParseIntPipe) id: number) {
+    return this.userKeyService.aesEncrypt(id);
+  }
+
+  @Get('aesDecrypt/:id')
+  async aesDecrypt(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() cryptedData: CryptedDataParam,
+  ) {
+    return this.userKeyService.aesDecrypt(cryptedData.cryptedata, id);
+  }
 }

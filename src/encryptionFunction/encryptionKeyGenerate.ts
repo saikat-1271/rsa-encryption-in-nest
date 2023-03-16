@@ -3,12 +3,12 @@
 import { constants, privateDecrypt, publicEncrypt } from 'crypto';
 import * as rsa from 'node-rsa';
 
-export const dynamicGenerateKeys = (id: number) => {
+export const dynamicGenerateKeys = (id: number) => {  // input a number like id, the key will generate according to that id
   // );
 
   const key = new rsa({ b: 2048, uniqueOption: id }); // generating keys
-  const privateKey = key.exportKey('private');
-  const publicKey = key.exportKey('public');
+  const privateKey = key.exportKey('private'); // private key created
+  const publicKey = key.exportKey('public'); // public key created
 
   return {
     userId: id,
@@ -18,6 +18,9 @@ export const dynamicGenerateKeys = (id: number) => {
 };
 
 export const encryptedData = async (data: string, publicKey: string) => {
+
+  // here data is stringify json  
+
   const encryptedData = await publicEncrypt(
     {
       key: publicKey,
@@ -26,7 +29,8 @@ export const encryptedData = async (data: string, publicKey: string) => {
     },
     Buffer.from(data, 'utf8'), // encrypting json.stringify
   );
-  return encryptedData.toString('base64');
+
+  return encryptedData.toString('base64');  // return encrypted text into string format
 };
 
 export const decryptData = async (
@@ -43,7 +47,8 @@ export const decryptData = async (
     },
     bufferData, // decrypt buffer
   );
-
-  return JSON.parse(decryptedData.toString());// return data from string to object
+    // decryptedData is in json stringify format
+  return JSON.parse(decryptedData.toString());
+  // pasre the json string and return
 
 };

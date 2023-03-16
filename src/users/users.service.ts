@@ -1,6 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { stringify } from 'querystring';
 import { encryptedData } from 'src/encryptionFunction/encryptionKeyGenerate';
 import { UserKeys } from 'src/user-keys/entity/userKey.entity';
 import { Repository } from 'typeorm';
@@ -23,6 +22,9 @@ export class UsersService {
   }
   async showallUsers() {
     return this.userRepository.find({});
+    // await this.cacheManager
+    // await this.cacheManager.set('key', 'value');
+    // return this.cacheManager.get('key');
   }
 
   async getUserById(id: number) {
@@ -35,6 +37,7 @@ export class UsersService {
       },
     });
 
+
     const userDetails = await this.userRepository.find({
       select: {
         name: true,
@@ -45,7 +48,7 @@ export class UsersService {
       },
     });
 
-    const stringifyData = JSON.stringify(userDetails);
+    const stringifyData = JSON.stringify(userDetails); // stringify the received json data
 
     const encryptedDataOfId = await encryptedData(
       stringifyData,
@@ -53,5 +56,9 @@ export class UsersService {
     );
 
     return encryptedDataOfId;
+  }
+
+  async aesCheck(id: number){
+    return 
   }
 }
